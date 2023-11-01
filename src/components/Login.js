@@ -10,11 +10,16 @@ import { useNavigate } from "react-router-dom";
 import { updateProfile } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { USER_AVATAR } from "../utils/constant";
 
 const Login = () => {
   const navigate = useNavigate();
+
   const dispatch = useDispatch();
+
+  //this useState is used to change the from sign in to signup and vice versa from with  onCLick by defaut it will be sign in form.
   const [isSignInForm, setIsSignInForm] = useState(true);
+
   const [errorMessage, setErrorMessage] = useState(null);
 
   const name = useRef(null);
@@ -24,13 +29,14 @@ const Login = () => {
   const handleButtonClick = () => {
     //validate the form data
     const message = checkValidData(email.current.value, password.current.value);
+
     setErrorMessage(message);
-    if (message) return; //if message is there then reutrn it should not got to next line
+    if (message) return; //if message is there then reutrn it should not go to next line
 
+    //if there are no error messgae from validata.js file then we will proceed
     //sign in / sign up logic
-
     if (!isSignInForm) {
-      //sign up logic
+      //sign up logic this codepsnippet we have taken from firebase website
       createUserWithEmailAndPassword(
         auth,
         email.current.value,
@@ -43,7 +49,7 @@ const Login = () => {
           //this updateProfile api is used to update user info
           updateProfile(user, {
             displayName: name.current.value,
-            photoURL: "https://avatars.githubusercontent.com/u/62467248?v=4",
+            photoURL: USER_AVATAR,
           })
             .then(() => {
               const { uid, email, displayName, photoURL } = auth.currentUser;
@@ -55,7 +61,7 @@ const Login = () => {
                   photoURL: photoURL,
                 })
               );
-              navigate("/browse");
+              // navigate("/browse"); because all handled from onAuthStateChanged which is in header component
               // Profile updated!
               // ...
             })
@@ -64,13 +70,13 @@ const Login = () => {
               // An error occurred
               // ...
             });
-          navigate("/browse");
+          // navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           setErrorMessage(errorCode, " ", errorMessage);
-          navigate("/");
+          // navigate("/");
           // ..
         });
     } else {
@@ -84,7 +90,7 @@ const Login = () => {
           // Signed in
           const user = userCredential.user;
           console.log(user);
-          navigate("/browse");
+          // navigate("/browse");
           // ...
         })
         .catch((error) => {
@@ -96,8 +102,8 @@ const Login = () => {
     }
   };
 
+  //with the help of below function we are able to change sign in to sign up and vice versa
   const toggleSignInform = () => {
-    //basicaly it is like a toggle feature if it is true then it will be false and vice versa
     setIsSignInForm(!isSignInForm);
   };
 
@@ -138,12 +144,14 @@ const Login = () => {
           className="p-4 my-4 w-full bg-gray-800"
         />
         <p className="text-red-500 font-bold p-1 text-lg">{errorMessage}</p>
+
         <button
           className="p-4 my-6 bg-red-700 w-full rounded-lg"
           onClick={handleButtonClick}
         >
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
+
         <p className="py-4 cursor-pointer" onClick={toggleSignInform}>
           {isSignInForm
             ? "New to Netflix ? Sign Up Now"

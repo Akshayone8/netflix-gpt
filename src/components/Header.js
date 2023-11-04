@@ -9,6 +9,7 @@ import { addUser, removeUser } from "../utils/userSlice";
 import { LOGO, SUPPORTED_LANGUAGES } from "../utils/constant";
 import { toggleGptSearchView } from "../utils/gptSlice";
 import { changeLanguage } from "../utils/configSlice";
+import { emptySearchResult } from "../utils/gptSlice";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ const Header = () => {
   const handleGptSearchClick = () => {
     //toggle search
     dispatch(toggleGptSearchView());
+    dispatch(emptySearchResult());
   };
 
   const handleLanguageChange = (e) => {

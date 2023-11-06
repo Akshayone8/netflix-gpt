@@ -72,10 +72,10 @@ const Header = () => {
   };
 
   return (
-    <div className="absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex justify-between">
-      <img className="w-44" src={LOGO} alt="Netflix Logo" />
+    <div className="absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row justify-between">
+      <img className="md:mx-0 w-44 mx-auto" src={LOGO} alt="Netflix Logo" />
       {user && (
-        <div className="flex items-center">
+        <div className="flex justify-between items-center">
           {showGpt && (
             <select
               className="bg-gray-900 text-white"
@@ -94,8 +94,12 @@ const Header = () => {
           >
             {showGpt ? "HomePage" : "GPT Search"}
           </button>
-          <img className="w-8 h-8" alt="user-icon" src={user?.photoURL} />
-          <button className="font-bold" onClick={handleSignOut}>
+          <img
+            className="w-8 h-8 hidden md:block"
+            alt="user-icon"
+            src={user?.photoURL}
+          />
+          <button className="font-bold text-red-500" onClick={handleSignOut}>
             Sing Out
           </button>
         </div>
